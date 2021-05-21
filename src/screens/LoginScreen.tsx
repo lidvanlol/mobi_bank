@@ -8,7 +8,6 @@ function LoginScreen() {
   const { biometrics } = React.useContext(DeviceContext);
   const { setUser } = React.useContext(UserContext);
   const [useBiometricLogin, setUseBiometricLogin] = React.useState(biometrics);
- 
 
   React.useEffect(() => {
     console.log(useBiometricLogin);
@@ -36,7 +35,7 @@ function LoginScreen() {
         Logujte se otiskom prsta
       </Text>
       <View style={{ marginTop: 40, width: "70%" }}>
-        <View style={{ marginTop: 20, position: "relative", height: 44 }}>
+        <View style={{ marginTop: 20, position: "relative", height: 24 }}>
           {biometrics && (
             <TouchableOpacity
               onPress={() => setUseBiometricLogin(true)}
@@ -47,10 +46,8 @@ function LoginScreen() {
                 style={{
                   height: 130,
                   width: 130,
-                  zIndex: 100,
-                  alignContent: "center",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  position: "relative",
+                  alignSelf: "center",
                 }}
               />
             </TouchableOpacity>
