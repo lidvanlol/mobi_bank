@@ -47,6 +47,7 @@ const CategoriesScreen: React.FC<Props> = ({ route, navigation }) => {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
+
     wait(2000).then(() => setRefreshing(false));
   }, []);
   // { label: "hrana", value: "hrana" },
