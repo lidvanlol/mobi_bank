@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, ScrollView } from "react-native";
+import { StyleSheet, View, ScrollView, RefreshControl } from "react-native";
 import { Headline, Title } from "react-native-paper";
 import HomeBar from "../components/AppBar";
 
@@ -11,14 +11,44 @@ export type Props = {
   acc: any;
   navigation: any;
 };
-
+const wait = (timeout) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
 const CategoriesScreen: React.FC<Props> = ({ route, navigation }) => {
   const [items, setItems] = React.useState([]);
+  const [refreshing, setRefreshing] = React.useState(false);
 
   React.useEffect(() => {
     Storage.getItems().then((items) => setItems(items));
   }, [route]);
 
+  let totalTrosakGorivo = items
+    .filter((item) => item.category == "gorivo")
+    .reduce((acc, item) => acc + item.sum, 0);
+
+  let totalTrosakRacuni = items
+    .filter((item) => item.category == "racuni")
+    .reduce((acc, item) => acc + item.sum, 0);
+
+  let totalTrosakHrana = items
+    .filter((item) => item.category == "hrana")
+    .reduce((acc, item) => acc + item.sum, 0);
+
+  let totalTrosakOdeca = items
+    .filter((item) => item.category == "odeca")
+    .reduce((acc, item) => acc + item.sum, 0);
+  let totalTrosakObuca = items
+    .filter((item) => item.category == "obuca")
+    .reduce((acc, item) => acc + item.sum, 0);
+
+  let totalTrosakPice = items
+    .filter((item) => item.category == "pice")
+    .reduce((acc, item) => acc + item.sum, 0);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
   // { label: "hrana", value: "hrana" },
   //         { label: "pice", value: "pice" },
   //         { label: "gorivo", value: "gorivo" },
@@ -49,35 +79,15 @@ const CategoriesScreen: React.FC<Props> = ({ route, navigation }) => {
 
   // console.log(filteredMachines);
 
-  let totalTrosakGorivo = items
-    .filter((item) => item.category == "gorivo")
-    .reduce((acc, item) => acc + item.sum, 0);
-
-  let totalTrosakRacuni = items
-    .filter((item) => item.category == "racuni")
-    .reduce((acc, item) => acc + item.sum, 0);
-
-  let totalTrosakHrana = items
-    .filter((item) => item.category == "hrana")
-    .reduce((acc, item) => acc + item.sum, 0);
-
-  let totalTrosakOdeca = items
-    .filter((item) => item.category == "odeca")
-    .reduce((acc, item) => acc + item.sum, 0);
-  let totalTrosakObuca = items
-    .filter((item) => item.category == "obuca")
-    .reduce((acc, item) => acc + item.sum, 0);
-
-  let totalTrosakPice = items
-    .filter((item) => item.category == "pice")
-    .reduce((acc, item) => acc + item.sum, 0);
-
   return (
     <>
       <HomeBar navigation={navigation} />
       <View style={styles.container}>
         <Headline style={styles.title}>Kategorije</Headline>
         <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           style={styles.scrollContainer}
           contentContainerStyle={styles.itemsContainer}
         >
